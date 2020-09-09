@@ -1,12 +1,23 @@
 package com.example.demo.api.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
+@ApiModel(
+        description = "Details about person"
+)
 public class PersonDto {
+
     @JsonProperty("id")
+    @ApiModelProperty(notes = "Unique id")
     private int id;
+
+    @ApiModelProperty(notes = "Name of person")
     @JsonProperty("name")
     private String name;
+
+    @ApiModelProperty(notes = "Company the person is employed in")
     @JsonProperty("company")
     private String company;
 
