@@ -3,7 +3,7 @@ package com.example.demo.api.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
+    
 @ApiModel(
         description = "Details about person"
 )

@@ -4,6 +4,7 @@ import com.example.demo.api.dto.PersonDto;
 import com.example.demo.db.model.Person;
 import com.example.demo.service.PersonService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -20,27 +21,6 @@ public class PersonController {
         this.personService = personService;
     }
 
-
-
-
-    /**
-     * Gets all people in database
-     *
-     * @return List of people from database
-     */
-    @ApiOperation(
-            value = "Gets all the people in database",
-            notes = "Gives you a list of people in database",
-            response = PersonDto.class
-    )
-    @GetMapping(path = "/getAllPeople", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<PersonDto> getAllPeople(){
-        return personService.getAllPeople();
-    }
-
-
-
-
     /**
      * Gets person based on id
      *
@@ -52,35 +32,31 @@ public class PersonController {
             notes = "Pass id to get current person",
             response = PersonDto.class
     )
-    @GetMapping(path = "/getById/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public PersonDto getPerson(@PathVariable("id") int id){
+    @GetMapping(path = "/people/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public PersonDto getPerson(
+            @ApiParam(value = "id of requested person", required = true)
+            @PathVariable("id") int id){
         return personService.getPerson(id);
     }
-
-
-
 
 
     /**
      * Gets a person list by his first name
      *
-     * @param firstName first name of person we want
+     * @param name      first name of person we want
      * @return          list of people with similar first name
      */
     @ApiOperation(
-            value = "Gets list of people from database by their first name",
-            notes = "Pass first name of people you want to get",
+            value = "Gets list of people from database by given substring in their name",
+            notes = "Pass substring you want to search in the name",
             response = PersonDto.class
     )
-    @GetMapping(path = "/getByFirstName/{firstName}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<PersonDto> getPeopleByFirstName(@PathVariable("firstName") String firstName){
-        return personService.getPeopleByFirstName(firstName);
+    @GetMapping(path = "/people", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<PersonDto> getPeopleByNameSearch(
+            @ApiParam(value = "substring you want to search in a name")
+            @RequestParam(name = "search") String name){
+        return personService.getPeopleByNameSearch(name);
     }
-
-
-
-
-
 
 
     /**
@@ -94,15 +70,12 @@ public class PersonController {
             notes = "Pass company name",
             response = PersonDto.class
     )
-    @GetMapping(path = "/getByCompany/{company}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<PersonDto> getPeopleByCompany(@PathVariable("company") String company){
+    @GetMapping(path = "/people/{company}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<PersonDto> getPeopleByCompany(
+            @ApiParam(value = "Name of the company", required = true)
+            @PathVariable("company") String company){
         return personService.getPeopleByCompany(company);
     }
-
-
-
-
-
 
     /**
      * Inserts new person to database if does not exists
@@ -113,14 +86,12 @@ public class PersonController {
             value = "Insert not existing person into database",
             notes = "Pass JSON person body"
     )
-    @PostMapping(path = "/insert", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void insertPerson(@RequestBody Person person){
+    @PostMapping(path = "/people", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void insertPerson(
+            @ApiParam(value = "person to be inserted", required = true)
+            @RequestBody Person person){
         personService.insertPerson(person);
     }
-
-
-
-
 
 
     /**
@@ -132,13 +103,14 @@ public class PersonController {
             value = "Update person",
             notes = "Pass updated person body"
     )
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void updatePerson(@RequestBody Person person){
+    @PutMapping(
+            path = "people/{id}",
+            consumes = MediaType.APPLICATION_JSON_VALUE)
+    public void updatePerson(
+            @ApiParam(value = "Updated person", required = true)
+            @RequestBody Person person){
         personService.updatePerson(person);
     }
-
-
-
 
 
     /**
@@ -150,14 +122,12 @@ public class PersonController {
             value = "Delete person with given id from database",
             notes = "Pass id of person you want to be deleted"
     )
-    @DeleteMapping(path = "/delete/{id}")
-    public void deletePersonWithSuchId(@PathVariable("id") int id){
+    @DeleteMapping(path = "/people/{id}")
+    public void deletePersonWithSuchId(
+            @ApiParam(value = "id of person we want to be deleted", required = true)
+            @PathVariable("id") int id){
         personService.deletePersonWithSuchId(id);
     }
-
-
-
-
 
 
     /**
@@ -169,9 +139,10 @@ public class PersonController {
             value = "Delete given person from database",
             notes = "Pass body of person you want to be deleted"
     )
-    @DeleteMapping(path = "/delete")
-    public void deletePerson(@RequestBody Person person){
+    @DeleteMapping(path = "/people")
+    public void deletePerson(
+            @ApiParam(value = "deletes given person")
+            @RequestBody Person person){
         personService.deletePerson(person);
     }
-
 }

@@ -15,8 +15,8 @@ import java.util.List;
 public interface PersonRepository extends JpaRepository<Person, Integer> {
 
 
-    @Query(value = "select p from Person p where p.name like :firstName%")
-    List<Person> getPeopleByFirstName(@Param("firstName") String firstName);
+    @Query(value = "select p from Person p where p.name like %:name%")
+    List<Person> getPeopleByNameSearch(@Param("name") String name);
 
     @Query(value = "select p from Person p where p.company = :companyName")
     List<Person> getPersonByCompany(@Param("companyName") String company);

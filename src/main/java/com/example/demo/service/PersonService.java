@@ -111,11 +111,11 @@ public class PersonService {
     /**
      * Gets list of people with similar first name
      *
-     * @param firstName
+     * @param name
      * @return          List of people
      */
-    public List<PersonDto> getPeopleByFirstName(String firstName){
-        return personRepository.getPeopleByFirstName(firstName).stream()
+    public List<PersonDto> getPeopleByNameSearch(String name){
+        return personRepository.getPeopleByNameSearch(name).stream()
                 .map(person -> objectMapper.convertValue(person, PersonDto.class))
                 .collect(Collectors.toList());
     }

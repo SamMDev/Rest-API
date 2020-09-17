@@ -3,7 +3,6 @@ package com.example.demo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.web.bind.annotation.RequestMapping;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -25,18 +24,18 @@ public class DemoApplication {
 
 	@Bean
 	public Docket swaggerConfiguration(){
-		/**
+		 /*
 		 * Docket customizes you swagger
 		 */
 
 		//Builder pattern
 		return new Docket(DocumentationType.SWAGGER_2)
-				/**
+				/*
 				 * ApiSelectorBuilder
 				 * Lets you customize how you want swagger to behave
 				 */
 				.select()
-				/**
+				/*
 				 * Url paths
 				 */
 				.paths(PathSelectors.ant("/api/*"))
@@ -49,6 +48,7 @@ public class DemoApplication {
 				.apiInfo(apiDetails());
 	}
 
+	//Adding application metadata
 	private ApiInfo	apiDetails(){
 		return new ApiInfo(
 				"Person Controller",
