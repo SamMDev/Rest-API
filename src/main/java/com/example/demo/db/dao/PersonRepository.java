@@ -19,5 +19,8 @@ public interface PersonRepository extends JpaRepository<Person, Integer> {
     List<Person> getPeopleByNameSearch(@Param("name") String name);
 
     @Query(value = "select p from Person p where p.company = :companyName")
-    List<Person> getPersonByCompany(@Param("companyName") String company);
+    List<Person> getPeopleByCompany(@Param("companyName") String company);
+
+    @Query(value = "select p from Person p where p.name like %:name% and p.company like %:company%")
+    List<Person> getSpecificPerson(String name, String company);
 }

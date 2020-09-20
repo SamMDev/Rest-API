@@ -54,27 +54,9 @@ public class PersonController {
     @GetMapping(path = "/people", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<PersonDto> getPeopleByNameSearch(
             @ApiParam(value = "substring you want to search in a name")
-            @RequestParam(name = "search") String name){
-        return personService.getPeopleByNameSearch(name);
-    }
-
-
-    /**
-     * Gets a person list by company
-     *
-     * @param company   Company name
-     * @return          List of people working in current company
-     */
-    @ApiOperation(
-            value = "Gets list of people who work in same company",
-            notes = "Pass company name",
-            response = PersonDto.class
-    )
-    @GetMapping(path = "/people/{company}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<PersonDto> getPeopleByCompany(
-            @ApiParam(value = "Name of the company", required = true)
-            @PathVariable("company") String company){
-        return personService.getPeopleByCompany(company);
+            @RequestParam(name = "search", required = false) String name,
+            @RequestParam(name = "company", required = false) String companyName){
+        return personService.getPeopleByNameSearch(name, companyName);
     }
 
     /**
@@ -127,22 +109,5 @@ public class PersonController {
             @ApiParam(value = "id of person we want to be deleted", required = true)
             @PathVariable("id") int id){
         personService.deletePersonWithSuchId(id);
-    }
-
-
-    /**
-     * Deletes the given person
-     *
-     * @param person    person that is going to be deleted
-     */
-    @ApiOperation(
-            value = "Delete given person from database",
-            notes = "Pass body of person you want to be deleted"
-    )
-    @DeleteMapping(path = "/people")
-    public void deletePerson(
-            @ApiParam(value = "deletes given person")
-            @RequestBody Person person){
-        personService.deletePerson(person);
     }
 }

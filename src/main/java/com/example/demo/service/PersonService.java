@@ -114,22 +114,30 @@ public class PersonService {
      * @param name
      * @return          List of people
      */
-    public List<PersonDto> getPeopleByNameSearch(String name){
-        return personRepository.getPeopleByNameSearch(name).stream()
-                .map(person -> objectMapper.convertValue(person, PersonDto.class))
-                .collect(Collectors.toList());
-    }
-
-
-    /**
-     * Gets list of people with given company
-     *
-     * @param company   company name
-     * @return          List of people
-     */
-    public List<PersonDto> getPeopleByCompany(String company){
-        return personRepository.getPersonByCompany(company).stream()
-                .map(person -> objectMapper.convertValue(person, PersonDto.class))
-                .collect(Collectors.toList());
+    public List<PersonDto> getPeopleByNameSearch(String name, String companyName){
+        /**
+         * If the both of string are not null, we want specific person
+         * If they are both null, we want to return all the people (we can use getSpecificPerson())
+         */
+        if((name == null && companyName == null)||(name != null && companyName != null)){
+            System.out.println("case 1");
+            return personRepository.getSpecificPerson(name, companyName).stream()
+                    .map(person -> objectMapper.convertValue(person, PersonDto.class))
+                    .collect(Collectors.toList());
+        }
+        /**
+         * if one of them is null, we decide to search by another one
+         */
+        else{
+            if(name == null){
+                return personRepository.getPeopleByCompany(companyName).stream()
+                        .map(person -> objectMapper.convertValue(person, PersonDto.class))
+                        .collect(Collectors.toList());
+            }else{
+                return personRepository.getPeopleByNameSearch(name).stream()
+                        .map(person -> objectMapper.convertValue(person, PersonDto.class))
+                        .collect(Collectors.toList());
+            }
+        }
     }
 }
